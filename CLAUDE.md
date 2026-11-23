@@ -85,7 +85,7 @@ Licences are in `sfx/CREDITS.md`. Five sounds are CC0 and are in the repository.
 - **Export from "All Reels".** Studio's own Export renders the whole editor timeline, including the empty working room at the end; that is why the skin hides it.
 - The skin works by Studio's own colour variables and by the words on its buttons. After any HyperFrames update, open a reel in the app and look: a renamed button comes back, a renamed variable goes warm grey.
 - Colours live in `TOKENS` in `scripts/lib/theme.ts`: navy surfaces, blue for controls, the logo's coral-to-magenta only on the mark. Logo and icon files are in `brand/`, rebuilt from `brand/source/` by `bash brand/build.sh`.
-- The name is ReelsEasy (site: reelseasy.com). The folder and the GitHub repository are still called Reel Editor and reel-editor. The plan for publishing it is `docs/architecture.md`.
+- The name is ReelsEasy (site: reelseasy.com). The plan for a packaged, signed release is `docs/architecture.md`.
 - To see the app's pages without the app: `bun scripts/reel.ts serve`, then open http://127.0.0.1:4310 in a browser.
 
 ## Rules that are easy to break
