@@ -47,6 +47,24 @@ describe("launcherHtml", () => {
     expect(html).toContain('data-inbox');
   });
 
+  test("asks once which AI the user edits with, and afterwards offers a button to start it", () => {
+    const tools = { claude: true, codex: false };
+    const first = launcherHtml([], [], { asked: false, tools });
+    expect(first).toContain("data-setup");
+    expect(first).toContain('data-assistant="claude"');
+    expect(first).toContain('data-assistant="codex"');
+    expect(first).toContain('data-assistant="none"');
+    expect(first).toContain("ChatGPT");
+    const chosen = launcherHtml([], [], { asked: true, assistant: "claude", tools });
+    expect(chosen).not.toContain("data-setup");
+    expect(chosen).toMatch(/<button[^>]*data-assistant="claude"[^>]*>Ask Claude<\/button>/);
+    const declined = launcherHtml([], [], { asked: true, assistant: "none", tools });
+    expect(declined).not.toContain("data-setup");
+    expect(declined).toContain('data-assistant="reset"');
+    // Pages built without the setting (older callers) simply do not ask.
+    expect(launcherHtml([], [])).not.toContain("data-setup");
+  });
+
   test("says what to do when there is nothing yet", () => {
     expect(launcherHtml([], [])).toContain("inbox");
   });
@@ -55,6 +73,7 @@ describe("launcherHtml", () => {
 describe("the app's requests", () => {
   let root: string;
   let app: ReturnType<typeof createApp>;
+  const launched: string[] = [];
   const call = (path: string, init?: RequestInit) => app.handle(new Request(`http://127.0.0.1:4310${path}`, init));
   const post = (path: string, body: unknown, headers: Record<string, string> = { "X-Reel-Editor": "1" }) =>
     call(path, { method: "POST", body: JSON.stringify(body), headers: { "Content-Type": "application/json", ...headers } });
@@ -66,7 +85,7 @@ describe("the app's requests", () => {
     await Bun.write(join(root, "inbox", "IMG_1.MOV"), "x");
     await Bun.write(join(root, "inbox", "notes.txt"), "x");
     await Bun.write(join(root, "reels", "demo", "edit.json"), "{}");
-    app = createApp({ root });
+    app = createApp({ root, launch: (path) => launched.push(path), findTool: (command) => (command === "claude" ? "/fake/bin/claude" : undefined) });
   });
   afterAll(() => {
     app.close();
@@ -126,6 +145,35 @@ describe("the app's requests", () => {
 
   test("opening the inbox folder is only for the app's own page", async () => {
     expect((await post("/api/inbox", {}, {})).status).toBe(403);
+  });
+
+  test("the first page asks about the AI until the user answers", async () => {
+    expect(await (await call("/")).text()).toContain("data-setup");
+    expect((await post("/api/assistant", { choice: "claude" }, {})).status).toBe(403);
+    expect((await post("/api/assistant", { choice: "siri" })).status).toBe(400);
+    expect(await (await call("/")).text()).toContain("data-setup");
+  });
+
+  test("choosing an assistant remembers it and starts it in the reel folder", async () => {
+    const res = await post("/api/assistant", { choice: "claude" });
+    expect(await res.json()).toMatchObject({ ok: true, name: "Claude Code", installed: true });
+    expect(launched).toHaveLength(1);
+    expect(launched[0]!.endsWith(".command")).toBe(true);
+    expect(await Bun.file(launched[0]!).text()).toContain("exec claude");
+    const page = await (await call("/")).text();
+    expect(page).not.toContain("data-setup");
+    expect(page).toContain("Ask Claude");
+    const codex = (await (await post("/api/assistant", { choice: "codex" })).json()) as { installed: boolean; install: string };
+    expect(codex.installed).toBe(false);
+    expect(codex.install).toMatch(/^https:/);
+  });
+
+  test("saying no is remembered too, and the question can be brought back", async () => {
+    await post("/api/assistant", { choice: "none" });
+    expect(await (await call("/")).text()).not.toContain("data-setup");
+    expect(launched).toHaveLength(2);
+    await post("/api/assistant", { choice: "reset" });
+    expect(await (await call("/")).text()).toContain("data-setup");
   });
 
   test("unknown paths are 404", async () => {

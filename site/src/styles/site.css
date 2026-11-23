@@ -1,0 +1,290 @@
+:root {
+  --bg: #000; --panel: #111113; --panel-2: #18181b; --line: rgba(255, 255, 255, 0.09); --line-2: rgba(255, 255, 255, 0.16);
+  --ink: #fff; --muted: #a1a1aa; --dim: #8a8a93; --coral: #ff7a59; --pink: #f0339b;
+  --wrap: 1200px; --gutter: clamp(16px, 4vw, 40px); --radius: 32px;
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1); --ease-expo: cubic-bezier(0.16, 1, 0.3, 1); --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1); --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 18px/1.5 Inter, -apple-system, "Helvetica Neue", Arial, sans-serif; font-optical-sizing: auto; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; }
+.wrap { width: min(var(--wrap), 100% - 2 * var(--gutter)); margin-inline: auto; }
+h1, h2, h3 { margin: 0; font-weight: 700; text-wrap: balance; }
+h1 { font-size: clamp(44px, 7.4vw, 88px); line-height: 0.98; letter-spacing: -0.05em; }
+h2 { font-size: clamp(34px, 5vw, 60px); line-height: 1; letter-spacing: -0.045em; }
+h3 { font-size: clamp(26px, 3.2vw, 40px); line-height: 1.04; letter-spacing: -0.04em; }
+p { margin: 0; }
+.lead { font-size: clamp(19px, 2.1vw, 26px); line-height: 1.25; letter-spacing: -0.02em; color: var(--muted); font-weight: 500; text-wrap: balance; }
+.muted { color: var(--muted); }
+
+/* Navigation */
+.nav { position: fixed; top: 14px; left: 0; right: 0; margin-inline: auto; width: max-content; max-width: calc(100% - 24px); z-index: 20; display: flex; align-items: center; gap: 22px; padding: 7px 7px 7px 14px;
+  background: rgba(18, 18, 20, 0.72); -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4); border: 1px solid var(--line); border-radius: 16px; white-space: nowrap;
+  transform-origin: 50% 0; transition: transform 420ms var(--ease-out); }
+/* Motion: the bar starts a little larger and lighter, and tightens once the page has moved (class "scrolled" from navState) */
+.nav::before { content: ""; position: absolute; inset: -1px; z-index: -1; border-radius: inherit; background: rgba(14, 14, 16, 0.5); border: 1px solid rgba(255, 255, 255, 0.07); box-shadow: 0 14px 44px rgba(0, 0, 0, 0.55);
+  opacity: 0; transition: opacity 320ms ease; pointer-events: none; }
+.js .nav { background: rgba(18, 18, 20, 0.44); }
+.js .nav:not(.scrolled) { transform: translateY(5px) scale(1.06); }
+.js .nav.scrolled::before { opacity: 1; }
+.nav .links a.on { color: var(--ink); }
+.nav .brand { display: flex; align-items: center; gap: 9px; font-weight: 700; font-size: 15px; letter-spacing: -0.02em; text-decoration: none; }
+.nav .brand img { width: 26px; height: 26px; }
+.nav .links { display: flex; gap: 20px; font-size: 14px; font-weight: 500; }
+.nav .links a { color: var(--muted); text-decoration: none; transition: color 0.15s; }
+.nav .links a:hover { color: var(--ink); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 52px; padding: 0 26px; border-radius: 999px; background: #fff; color: #000; font-weight: 650; font-size: 17px;
+  letter-spacing: -0.02em; text-decoration: none; transition: transform 0.15s ease, background 0.15s ease; position: relative; overflow: hidden; isolation: isolate; }
+.btn:hover { transform: translateY(-1px); background: #f1f1f3; }
+.btn:active { transform: scale(0.98); }
+.btn svg { width: 17px; height: 17px; margin-top: -3px; }
+.btn.small { height: 36px; padding: 0 16px; font-size: 14px; border-radius: 10px; }
+.btn.ghost { background: rgba(255, 255, 255, 0.07); color: #fff; border: 1px solid var(--line-2); }
+.btn.ghost:hover { background: rgba(255, 255, 255, 0.12); }
+:focus-visible { outline: 2px solid #fff; outline-offset: 3px; border-radius: 8px; }
+
+/* Hero */
+.hero { position: relative; padding: clamp(120px, 15vw, 180px) 0 0; text-align: center; overflow-x: clip; }
+.hero::before { content: ""; position: absolute; inset: 0 0 auto 0; height: min(980px, 130vw); z-index: -1; background: url("/assets/hero-glow.jpg") center top / cover no-repeat; transform-origin: 50% 0;
+  -webkit-mask-image: linear-gradient(#000 55%, transparent); mask-image: linear-gradient(#000 55%, transparent); }
+.halo { position: relative; }
+.hero .halo { width: clamp(84px, 9vw, 112px); margin: 0 auto 30px; }
+.mark { width: 100%; filter: drop-shadow(0 18px 50px rgba(240, 51, 155, 0.45)); }
+/* Glow and fog behind the app icon: one breathing glow (b) and three drifting haze blobs (i), clipped and faded by the mask so nothing spills */
+.aura { position: absolute; left: 50%; top: 50%; z-index: -1; width: min(720px, 100vw); height: 440px; margin: -220px 0 0 calc(min(720px, 100vw) / -2); overflow: hidden; overflow: clip; pointer-events: none;
+  -webkit-mask-image: radial-gradient(closest-side, #000 30%, transparent 100%); mask-image: radial-gradient(closest-side, #000 30%, transparent 100%); }
+.aura b, .aura i { position: absolute; left: 50%; top: 50%; border-radius: 50%; }
+.aura b { width: 300px; height: 300px; margin: -150px 0 0 -150px; opacity: 0.8; background: radial-gradient(closest-side, rgba(255, 122, 89, 0.4), rgba(240, 51, 155, 0.24) 48%, rgba(240, 51, 155, 0)); }
+.aura i:nth-of-type(1) { width: 460px; height: 250px; margin: -165px 0 0 -350px; transform-origin: 68% 62%; background: radial-gradient(closest-side, rgba(255, 122, 89, 0.2), rgba(255, 122, 89, 0.07) 55%, rgba(255, 122, 89, 0));
+  --x0: -26px; --y0: 10px; --x1: 44px; --y1: -22px; --r0: -14deg; --r1: 22deg; --s0: 0.92; --s1: 1.12; --o0: 0.5; --o1: 1; }
+.aura i:nth-of-type(2) { width: 430px; height: 280px; margin: -120px 0 0 -100px; transform-origin: 30% 44%; background: radial-gradient(closest-side, rgba(240, 51, 155, 0.2), rgba(240, 51, 155, 0.06) 55%, rgba(240, 51, 155, 0));
+  --x0: 30px; --y0: -14px; --x1: -40px; --y1: 18px; --r0: 18deg; --r1: -20deg; --s0: 1.08; --s1: 0.9; --o0: 1; --o1: 0.45; }
+.aura i:nth-of-type(3) { width: 580px; height: 210px; margin: -60px 0 0 -290px; transform-origin: 50% 18%; background: radial-gradient(closest-side, rgba(255, 214, 226, 0.1), rgba(255, 214, 226, 0.035) 60%, rgba(255, 214, 226, 0));
+  --x0: -34px; --y0: -8px; --x1: 36px; --y1: 14px; --r0: 9deg; --r1: -12deg; --s0: 0.94; --s1: 1.1; --o0: 0.6; --o1: 1; }
+h1 .w { display: inline-block; }
+.kicker { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 18px; font-size: clamp(15px, 1.6vw, 19px); font-weight: 600; letter-spacing: -0.02em; }
+.kicker svg { width: 16px; height: 16px; margin-top: -3px; }
+.hero .lead { max-width: 760px; margin: 22px auto 0; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 30px; }
+.soon { margin-top: 14px; font-size: 14px; color: var(--dim); }
+.soon a { color: var(--muted); }
+.tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 22px; margin: 34px auto 0; max-width: 1000px; padding: 0; list-style: none; font-size: 13px; font-weight: 500; color: var(--dim); }
+
+/* App window */
+.stage { position: relative; margin: clamp(48px, 7vw, 84px) auto 0; transform-origin: 50% 0; }
+.window { position: relative; border-radius: 18px; border: 1px solid var(--line-2); background: #0a0e17; overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6), 0 60px 140px -30px rgba(240, 51, 155, 0.28), 0 30px 80px rgba(0, 0, 0, 0.6); }
+.window .bar { display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; background: #0d1220; border-bottom: 1px solid var(--line); }
+.window .bar i { width: 12px; height: 12px; border-radius: 50%; background: #ff5f57; }
+.window .bar i:nth-child(2) { background: #febc2e; }
+.window .bar i:nth-child(3) { background: #28c840; }
+.window .bar span { flex: 1; margin-right: 52px; text-align: center; font-size: 13px; font-weight: 600; color: #8b95a9; }
+/* Light on the glass while the window is still tilted back (--sheen is set by flatten) */
+.window::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0) 46%); opacity: var(--sheen, 0); }
+
+section { padding: clamp(84px, 12vw, 168px) 0 0; }
+.center { text-align: center; }
+.center .lead { max-width: 720px; margin: 20px auto 0; }
+
+/* From clip to reel */
+.strip { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; margin-top: clamp(40px, 5vw, 64px); }
+.phone { position: relative; border-radius: 22px; overflow: hidden; border: 1px solid var(--line-2); background: var(--panel); aspect-ratio: 9 / 16; }
+.phone img, .phone video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.strip figure { margin: 0; }
+.strip figcaption { margin-top: 12px; font-size: 14px; font-weight: 600; letter-spacing: -0.01em; text-align: center; }
+.strip figcaption span { display: block; font-weight: 400; color: var(--dim); }
+.strip .raw .phone { opacity: 0.72; filter: saturate(0.75); }
+
+/* Steps */
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: clamp(40px, 5vw, 64px); counter-reset: none; text-align: left; }
+.step { padding: 30px; border-radius: 24px; background: var(--panel); border: 1px solid var(--line); }
+.step b { display: block; font-size: 24px; font-weight: 700; letter-spacing: -0.035em; line-height: 1.1; margin-bottom: 10px; }
+.step p { color: var(--muted); font-size: 17px; line-height: 1.4; }
+
+/* Feature cards */
+.cards { display: grid; gap: 16px; margin-top: clamp(40px, 5vw, 64px); }
+.card { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(24px, 4vw, 56px); align-items: center; min-height: 440px; padding: clamp(28px, 4.4vw, 60px);
+  padding-right: 0; border-radius: var(--radius); background: var(--panel); border: 1px solid var(--line); overflow: hidden; }
+.card p { margin-top: 16px; color: var(--muted); font-size: clamp(18px, 1.9vw, 23px); line-height: 1.28; letter-spacing: -0.02em; font-weight: 500; }
+.card .shot { align-self: stretch; position: relative; min-height: 320px; margin: calc(-1 * clamp(28px, 4.4vw, 60px)) 0; }
+.card .shot.ui { margin: 0; align-self: center; }
+.card .shot.ui img { width: 150%; max-width: none; border-radius: 14px 0 0 14px; border: 1px solid var(--line-2); border-right: 0; box-shadow: -30px 30px 80px rgba(0, 0, 0, 0.5); }
+.card .shot.ui.low img { object-fit: cover; object-position: left bottom; height: 380px; width: 190%; }
+.card .duo { position: absolute; inset: 0; display: flex; gap: 16px; align-items: center; justify-content: center; padding: 28px clamp(28px, 4.4vw, 60px) 28px 0; }
+.card .duo .phone { width: min(46%, 230px); flex: none; box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55); }
+.card .duo .phone:nth-child(2) { top: 26px; }
+.pane { display: block; position: relative; border-radius: 14px 0 0 14px; }
+.card, .step, .reason { position: relative; }
+/* The cut, drawn: a waveform whose silent gaps close up. Without script or with reduced motion it rests closed. */
+.wave { display: block; width: min(100%, 420px); height: auto; margin-top: clamp(22px, 2.6vw, 30px); overflow: visible; }
+.wave path { fill: none; stroke-width: 3; stroke-linecap: round; }
+.wave .sp { stroke: #fff; }
+.wave .si { stroke: rgba(255, 255, 255, 0.34); }
+.wave .cut { fill: rgba(240, 51, 155, 0.16); stroke: rgba(240, 51, 155, 0.6); stroke-width: 1; }
+.wave .gap { transform-box: fill-box; transform-origin: 0 50%; opacity: 0; }
+.wave .b { transform: translateX(-48px); }
+.wave .c { transform: translateX(-102px); }
+.card.wide { grid-template-columns: 1fr; padding-right: clamp(28px, 4.4vw, 60px); min-height: 0; }
+.say { display: grid; gap: 12px; margin-top: 28px; }
+.card p.fine { margin-top: 20px; font-size: 15px; line-height: 1.45; letter-spacing: 0; font-weight: 400; color: var(--dim); }
+.say div { padding: 16px 20px; border-radius: 16px; background: var(--panel-2); border: 1px solid var(--line); font-size: clamp(16px, 1.6vw, 19px); font-weight: 500; letter-spacing: -0.015em; }
+.say div::before { content: "›"; margin-right: 12px; color: var(--pink); font-weight: 700; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.two .card { grid-template-columns: 1fr; padding-right: clamp(28px, 4.4vw, 60px); min-height: 0; align-items: start; }
+
+/* Reasons */
+.reasons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: clamp(40px, 5vw, 64px); text-align: left; }
+.reason { padding: 28px; border-radius: 24px; background: var(--panel); border: 1px solid var(--line); }
+.reason b { display: block; font-size: 22px; letter-spacing: -0.035em; line-height: 1.1; margin-bottom: 10px; }
+.reason p { color: var(--muted); font-size: 16px; line-height: 1.4; }
+
+/* Close */
+.close { position: relative; text-align: center; padding-bottom: clamp(84px, 11vw, 150px); }
+.close .halo { width: 96px; margin: 0 auto 28px; }
+.status { max-width: 640px; margin: 26px auto 0; padding: 18px 22px; border-radius: 18px; border: 1px solid var(--line); background: var(--panel); color: var(--muted); font-size: 16px; line-height: 1.45; text-align: left; }
+.status b { color: var(--ink); }
+footer { border-top: 1px solid var(--line); padding: 32px 0 44px; color: var(--dim); font-size: 14px; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 10px 26px; justify-content: space-between; }
+footer a { color: var(--muted); text-decoration: none; }
+footer a:hover { color: var(--ink); }
+
+/* ============ Motion ============
+   Every hidden or moved starting state lives inside (prefers-reduced-motion: no-preference), so the reduced page is the finished page.
+   Keyframes only describe where things come from; where they end is the normal style above. */
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes arrive { from { opacity: 0; transform: translateY(18px); } }
+@keyframes word-in { from { opacity: 0; transform: translateY(0.38em); filter: blur(8px); } }
+@keyframes mark-in { from { opacity: 0; transform: translateY(12px) scale(0.8); } }
+@keyframes mark-float { from { translate: 0 0; } to { translate: 0 -6px; } }
+@keyframes glow-drift { from { transform: scale(1.03) translate3d(-1%, 0, 0); } to { transform: scale(1.1) translate3d(1.2%, -1.2%, 0); } }
+@keyframes glow-sink { to { translate: 0 110px; } }
+@keyframes aura-breathe { from { opacity: 0.5; transform: scale(0.86); } to { opacity: 1; transform: scale(1.12); } }
+@keyframes fog-drift { from { translate: var(--x0) var(--y0); } to { translate: var(--x1) var(--y1); } }
+@keyframes fog-turn { from { rotate: var(--r0); scale: var(--s0); } to { rotate: var(--r1); scale: var(--s1); } }
+@keyframes fog-fade { from { opacity: var(--o0); } to { opacity: var(--o1); } }
+@keyframes rise-in { from { opacity: 0; transform: translateY(24px); } }
+@keyframes head-in { from { opacity: 0; transform: translateY(28px); filter: blur(8px); } }
+@keyframes card-in { from { opacity: 0; transform: translateY(38px) scale(0.975); } }
+@keyframes deal-in { from { opacity: 0; transform: translate3d(calc(var(--i, 0) * -42%), 34px, 0) rotate(calc(-9deg + var(--i, 0) * 1.2deg)) scale(0.92); } }
+@keyframes deal-in-small { from { opacity: 0; transform: translateY(30px) rotate(-3.5deg) scale(0.94); } }
+@keyframes belt { to { transform: translateX(calc(-100% / 3)); } }
+@keyframes sheen { 0% { transform: translateX(-140%) skewX(-20deg); } 20%, 100% { transform: translateX(420%) skewX(-20deg); } }
+@keyframes wave-all { 0%, 88% { opacity: 1; } 92%, 94% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes wave-b { 0%, 36% { transform: translateX(0); animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1); } 48%, 93% { transform: translateX(-48px); } 93.5%, 100% { transform: translateX(0); } }
+@keyframes wave-c { 0%, 36% { transform: translateX(0); animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1); } 48%, 93% { transform: translateX(-102px); } 93.5%, 100% { transform: translateX(0); } }
+@keyframes wave-gap { 0%, 36% { transform: scaleX(1); opacity: 1; animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1); } 48%, 93% { transform: scaleX(0); opacity: 0; } 93.5%, 100% { transform: scaleX(1); opacity: 1; } }
+@keyframes wave-cut { 0%, 20% { opacity: 0; } 28%, 100% { opacity: 1; } }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* 1. Hero entrance: plain CSS, so it runs (and ends) with or without script */
+  .hero::before { animation: fade-in 1.8s var(--ease-soft) backwards, glow-drift 28s ease-in-out infinite alternate; }
+  .hero .aura { animation: fade-in 1.8s ease 200ms backwards; }
+  .hero .mark { animation: mark-in 1000ms var(--ease-expo) backwards, mark-float 3s ease-in-out 1s infinite alternate; }
+  .hero .kicker { animation: arrive 700ms var(--ease-expo) 80ms backwards; }
+  .hero h1 .w { animation: word-in 700ms var(--ease-expo) calc(150ms + var(--i, 0) * 50ms) backwards; }
+  .hero .lead { animation: arrive 700ms var(--ease-expo) 380ms backwards; }
+  .hero .cta { animation: arrive 700ms var(--ease-expo) 450ms backwards; }
+  .hero .soon { animation: arrive 700ms var(--ease-expo) 520ms backwards; }
+  .hero .belt { animation: arrive 700ms var(--ease-expo) 590ms backwards; }
+  .hero .stage { animation: fade-in 1000ms ease 450ms backwards; }
+
+  /* Glow and fog around the icon */
+  .aura b { animation: aura-breathe 2.7s ease-in-out infinite alternate; }
+  .aura i { animation: fog-drift 17s ease-in-out infinite alternate, fog-turn 23s ease-in-out infinite alternate, fog-fade 13s ease-in-out infinite alternate; }
+  .aura i:nth-of-type(1) { animation-delay: -5s, -9s, -2s; }
+  .aura i:nth-of-type(2) { animation-duration: 21s, 15s, 19s; animation-delay: -12s, -4s, -8s; }
+  .aura i:nth-of-type(3) { animation-duration: 25s, 19s, 16s; animation-delay: -3s, -14s, -6s; }
+  .aura { transition: opacity 1400ms ease; }
+  .js .halo .rise:not(.in) ~ .aura { opacity: 0; }
+
+  /* Arrival on scroll: hidden only while the script is running, which then adds "in" (see reveal) */
+  .js .rise { opacity: 0; }
+  .js .rise.in { opacity: 1; animation: rise-in 800ms var(--ease-expo) var(--d, 0ms) backwards; }
+  .js h2.rise.in { animation-name: head-in; animation-duration: 900ms; }
+  .js .card.rise.in { animation-name: card-in; animation-duration: 1000ms; }
+  .js .strip .rise.in { animation-name: deal-in; animation-duration: 900ms; }
+  .js .close .mark.rise.in { animation: rise-in 800ms var(--ease-expo) backwards, mark-float 3s ease-in-out 800ms infinite alternate; }
+
+  /* The tag row as a slow belt (class "run" is set by marquee on wide screens only, where the row is one line anyway) */
+  .belt.run { max-width: 1000px; margin: 34px auto 0; overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent); mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent); }
+  .belt.run .tags { flex-wrap: nowrap; justify-content: flex-start; gap: 0; width: max-content; max-width: none; margin: 0; animation: belt 54s linear infinite; }
+  .belt.run .tags li { flex: none; margin-right: 22px; }
+  .belt.run .tags li[aria-hidden] { display: block; }
+
+  /* A coral and pink glint that crosses the main button every few seconds, under the label */
+  .cta .btn:not(.ghost)::after { content: ""; position: absolute; z-index: -1; top: -20%; bottom: -20%; left: 0; width: 38%; pointer-events: none;
+    background: linear-gradient(90deg, rgba(255, 122, 89, 0), rgba(255, 122, 89, 0.36) 40%, rgba(240, 51, 155, 0.36) 60%, rgba(240, 51, 155, 0));
+    transform: translateX(-140%) skewX(-20deg); animation: sheen 6.5s var(--ease-in-out) 1.8s infinite; }
+
+  /* The waveform: open with its pauses until it plays, then the loop */
+  .js .wave:not(.play) .b, .js .wave:not(.play) .c { transform: none; }
+  .js .wave:not(.play) .gap { opacity: 1; }
+  .js .wave.play { animation: wave-all 8s linear infinite; }
+  .js .wave.play .b { animation: wave-b 8s linear infinite; }
+  .js .wave.play .c { animation: wave-c 8s linear infinite; }
+  .js .wave.play .gap { animation: wave-gap 8s linear infinite; }
+  .js .wave.play .cut { animation: wave-cut 8s linear infinite; }
+
+  /* Loops rest while their block is off screen (class "is-off" from pauseOffscreen) */
+  .hero.is-off::before { animation-play-state: paused; }
+  .halo.is-off .aura b, .halo.is-off .aura i { animation-play-state: paused; }
+  .hero .halo.is-off .mark, .js .close .halo.is-off .mark.rise.in { animation-play-state: running, paused; }
+  .cta.is-off .btn:not(.ghost)::after { animation-play-state: paused; }
+  .belt.run.is-off .tags, .belt.run:hover .tags { animation-play-state: paused; }
+  .js .wave.play.is-off, .js .wave.play.is-off * { animation-play-state: paused; }
+}
+.tags li[aria-hidden] { display: none; }
+/* The hero glow also sinks a little as the first screen leaves, where the browser can link an animation to the scroll */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .hero::before { animation: fade-in 1.8s var(--ease-soft) backwards, glow-drift 28s ease-in-out infinite alternate, glow-sink linear both; animation-timeline: auto, auto, scroll(root block); animation-range: normal, normal, 0px 900px; }
+  }
+}
+
+/* Under the cursor: desktop pointers only */
+@media (hover: hover) and (pointer: fine) {
+  /* A light that follows the cursor over the cards (--mx and --my are set by cursorLight) */
+  :is(.card, .step, .reason)::before, :is(.card, .step, .reason)::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity 400ms ease; }
+  :is(.card, .step, .reason)::before { background: radial-gradient(560px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.06), rgba(240, 51, 155, 0.03) 42%, transparent 70%); }
+  :is(.card, .step, .reason)::after { inset: -1px; padding: 1px; background: radial-gradient(380px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.6), rgba(255, 122, 89, 0.3) 38%, transparent 72%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+  .card::after { inset: 0; }
+  :is(.card, .step, .reason):hover::before { opacity: 1; }
+  :is(.cards, .steps, .reasons):hover :is(.card, .step, .reason)::after { opacity: 1; }
+
+  /* The stills row: the one under the cursor lifts, the rest step back */
+  .strip figure { transition: transform 380ms var(--ease-out), opacity 260ms ease; }
+  .strip:has(figure:hover) figure:not(:hover) { opacity: 0.5; }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .strip figure:hover { transform: translateY(-8px) scale(1.035); }
+  /* Pictures that turn toward the cursor (tiltOnHover): the parent holds the perspective, the picture gets the transform */
+  .card .shot.ui, .card .duo { perspective: 1200px; }
+  .stage { perspective: 1400px; }
+  .pane::after, .card .duo .phone::after, .window::after { content: ""; position: absolute; inset: 0; z-index: 2; border-radius: inherit; pointer-events: none; opacity: var(--so, 0);
+    background: radial-gradient(70% 90% at var(--sx, 50%) var(--sy, 50%), rgba(255, 255, 255, 0.17), rgba(255, 255, 255, 0) 62%); }
+  .window::after { background: radial-gradient(45% 70% at var(--sx, 50%) var(--sy, 50%), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0) 62%); }
+  /* The pink glow under the window leans toward the cursor while it is tilted (--gx, --go) */
+  .stage::before { content: ""; position: absolute; left: 14%; right: 14%; bottom: -70px; height: 190px; border-radius: 50%; pointer-events: none;
+    background: radial-gradient(closest-side, rgba(240, 51, 155, 0.34), rgba(240, 51, 155, 0)); opacity: var(--go, 0); translate: var(--gx, 0px) 0; }
+}
+@media (prefers-reduced-motion: reduce) { .phone video { display: none; } .phone:has(video) { background: url("/assets/frame-1.jpg") center / cover; } }
+
+@media (max-width: 900px) {
+  .nav .links { display: none; }
+  .strip { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px 12px; }
+  .steps, .reasons, .two { grid-template-columns: 1fr; }
+  .card { grid-template-columns: 1fr; padding-right: clamp(28px, 4.4vw, 60px); min-height: 0; }
+  .card .shot { margin: 0; min-height: 0; }
+  .card .shot.ui img, .card .shot.ui.low img { width: 100%; height: auto; border-radius: 12px; border-right: 1px solid var(--line-2); }
+  .card .shot.ui.low img { height: 240px; }
+  .card .duo { position: static; padding: 0; }
+  .pane { border-radius: 12px; }
+  .js .strip .rise.in { animation-name: deal-in-small; }
+}
+@media (max-width: 560px) { .strip { grid-template-columns: repeat(2, minmax(0, 1fr)); } .nav { gap: 12px; } }
+@media (min-width: 901px) and (max-width: 1100px) { .reasons { grid-template-columns: 1fr 1fr; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn, .nav, .nav::before, .strip figure { transition: none; } .js .nav:not(.scrolled) { transform: none; } }

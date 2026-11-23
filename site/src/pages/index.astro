@@ -1,0 +1,26 @@
+---
+import Base from "../layouts/Base.astro";
+import Nav from "../components/Nav.astro";
+import Hero from "../components/Hero.astro";
+import HowItWorks from "../components/HowItWorks.astro";
+import Features from "../components/Features.astro";
+import Why from "../components/Why.astro";
+import Close from "../components/Close.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Base
+  title="ReelsEasy: the free Mac app that cuts your reels for you"
+  description="Drop a phone clip in, get a finished reel out. ReelsEasy cuts the pauses, adds captions, zooms and sound, on your own Mac. Free and open source."
+  social="Drop a phone clip in, get a finished reel out. Free, open source, and everything stays on your Mac."
+>
+  <Nav />
+  <main id="top">
+    <Hero />
+    <HowItWorks />
+    <Features />
+    <Why />
+    <Close />
+  </main>
+  <Footer />
+</Base>

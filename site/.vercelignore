@@ -1,0 +1,7 @@
+source
+preview-first-screen.jpg
+.env.local
+.env*
+dist
+.astro
+node_modules

@@ -88,3 +88,14 @@ reels/*
 # agent skills from HyperFrames: install them with node_modules/.bin/hyperframes skills
 .claude/skills
 skills-lock.json
+
+# which AI you edit with, and the script that starts it: yours, not the project's
+.reelseasy.json
+.reelseasy
+
+# the link between this folder and its Vercel project
+.vercel
+
+# the website's raw originals and working pictures stay on this Mac
+site/source
+site/preview-first-screen.jpg

@@ -9,6 +9,7 @@ import { createServer } from "node:net";
 import { basename, extname, isAbsolute, join } from "node:path";
 import { slugify } from "./media";
 import { applyReel, importClip, ingestClip, listReels, renderReel, ROOT, watchReel, type ReelInfo } from "./pipeline";
+import { ASSISTANTS, findTool, isAssistant, prepareLauncher, readSettings, writeSettings, type AssistantId, type Settings } from "./assistant";
 import { BRAND, studioSkinCss, studioSkinJs, tokensCss } from "./theme";
 
 const VIDEO = new Set([".mov", ".mp4", ".m4v"]);
@@ -24,8 +25,34 @@ const length = (seconds: number) => {
   return whole >= 60 ? `${Math.floor(whole / 60)} min ${whole % 60} s` : `${whole} s`;
 };
 
+/** What the page needs to know about editing by chat: has the user answered, with what, and which tools are on this Mac. */
+export type AssistantView = { asked: boolean; assistant?: Settings["assistant"]; tools: Record<AssistantId, boolean> };
+
+const ASK: Record<AssistantId, string> = { claude: "Ask Claude", codex: "Ask Codex" };
+
+/** The first-launch question, shown until it is answered. */
+function setupCard(ai: AssistantView): string {
+  const found = (Object.keys(ASSISTANTS) as AssistantId[]).filter((id) => ai.tools[id]).map((id) => ASSISTANTS[id].name);
+  return `<section class="setup glass" data-setup>
+      <h2>Do you edit with an AI?</h2>
+      <p>${BRAND} has no AI of its own. If you use Claude Code or Codex, the coding agent from the makers of ChatGPT, it can edit your reels when you tell it what you want. Pick one and it opens in your reel folder, ready to go.</p>
+      <div class="actions">
+        <button class="primary" data-assistant="claude">${ASSISTANTS.claude.label}</button>
+        <button data-assistant="codex">${ASSISTANTS.codex.label}</button>
+        <button class="quiet" data-assistant="none">Not now</button>
+      </div>
+      <p class="found">${found.length ? `Found on this Mac: ${found.join(" and ")}.` : "Neither is on this Mac yet. Pick one and you are shown where to get it."}</p>
+    </section>`;
+}
+
 /** The home page: reels to edit or export, and clips waiting in the inbox. */
-export function launcherHtml(reels: ReelInfo[], inbox: string[]): string {
+export function launcherHtml(reels: ReelInfo[], inbox: string[], ai?: AssistantView): string {
+  const chosen = ai?.asked && isAssistant(ai.assistant) ? ai.assistant : undefined;
+  const aiButtons = !ai?.asked
+    ? ""
+    : chosen
+      ? `<button class="primary" data-assistant="${chosen}">${ASK[chosen]}</button><button class="quiet" data-assistant="reset">Change</button>`
+      : `<button class="quiet" data-assistant="reset">Set up AI editing</button>`;
   const state = (r: ReelInfo) => (r.rendered ? "Exported" : r.built ? "Not exported yet" : "New");
   const facts = (r: ReelInfo) =>
     [r.seconds ? length(r.seconds) : "", r.pieces ? `${r.pieces} ${r.pieces === 1 ? "piece" : "pieces"}` : ""].filter(Boolean).join(" · ");
@@ -123,6 +150,10 @@ export function launcherHtml(reels: ReelInfo[], inbox: string[]): string {
   .hint { color: var(--muted); margin: 0 0 14px; }
   .inbox > button { width: 100%; margin-top: 14px; }
   .empty { color: var(--muted); padding: 22px; margin: 0; max-width: 560px; }
+  .setup { padding: 22px 24px; margin-bottom: 28px; max-width: 760px; }
+  .setup h2 { font-size: 18px; margin-bottom: 8px; }
+  .setup p { color: var(--muted); margin: 0 0 16px; max-width: 64ch; }
+  .setup .found { margin: 14px 0 0; font-size: 13px; }
   code { background: rgba(255, 255, 255, 0.08); padding: 1px 6px; border-radius: 6px; color: var(--ink); }
   #status { position: fixed; left: 0; right: 0; bottom: 0; z-index: 5; display: flex; align-items: center; gap: 10px; min-height: 46px; padding: 10px 24px; color: var(--muted);
     background: rgba(10, 14, 23, 0.7); -webkit-backdrop-filter: blur(24px) saturate(1.5); backdrop-filter: blur(24px) saturate(1.5); border-top: 1px solid var(--line); }
@@ -138,9 +169,11 @@ export function launcherHtml(reels: ReelInfo[], inbox: string[]): string {
   <img src="/brand/icon.png" alt="" onerror="this.remove()">
   <span class="name">${BRAND}</span>
   <span class="note">Everything stays on this Mac. No account, no upload.</span>
+  ${aiButtons}
 </header>
 <div class="layout">
   <main>
+    ${ai && !ai.asked ? setupCard(ai) : ""}
     <h1>Reels<span>${reels.length || ""}</span></h1>
     ${reels.length ? `<ul class="reels">${reelCards}</ul>` : noReels}
   </main>
@@ -193,6 +226,16 @@ export function launcherHtml(reels: ReelInfo[], inbox: string[]): string {
     });
     if (b.dataset.reveal) act(b, "", () => post("/api/reveal", { slug: b.dataset.reveal }));
     if ("inbox" in b.dataset) act(b, "", () => post("/api/inbox", {}));
+    if (b.dataset.assistant) act(b, "", async () => {
+      const choice = b.dataset.assistant;
+      const r = await post("/api/assistant", { choice });
+      if (choice === "none" || choice === "reset") return location.reload();
+      const setup = document.querySelector("section.setup");
+      if (setup) setup.remove();
+      say(r.installed
+        ? r.name + " is opening in Terminal, in your reel folder. Try: Edit the new clip in my inbox into a reel."
+        : r.name + " is not on this Mac yet. The Terminal window that opened shows where to get it: " + r.install);
+    });
     if (b.dataset.ingest) act(b, "Transcribing and proposing a cut. This takes up to a minute…", async () => {
       const { slug } = await post("/api/ingest", { file: b.dataset.ingest });
       const { url } = await post("/api/open", { slug });
@@ -216,9 +259,25 @@ function freePort(from: number): Promise<number> {
 
 type Editor = { url: string; port: number; proc: ReturnType<typeof Bun.spawn>; watcher: { close: () => void } };
 
-export function createApp(opts: { root?: string; log?: (line: string) => void } = {}) {
+export type AppOptions = {
+  root?: string;
+  log?: (line: string) => void;
+  /** Opens a file with the system, as a double-click would. Replaced in tests. */
+  launch?: (path: string) => void;
+  /** Finds a command line tool on this Mac. Replaced in tests. */
+  findTool?: (command: string) => string | undefined;
+};
+
+export function createApp(opts: AppOptions = {}) {
   const root = opts.root ?? ROOT;
   const log = opts.log ?? (() => {});
+  const launch = opts.launch ?? ((path: string) => void Bun.spawn(["open", path]));
+  const tool = opts.findTool ?? ((command: string) => findTool(command));
+
+  function assistantView(): AssistantView {
+    const settings = readSettings(root);
+    return { asked: settings.asked === true, assistant: settings.assistant, tools: { claude: Boolean(tool("claude")), codex: Boolean(tool("codex")) } };
+  }
   const editors = new Map<string, Editor>();
 
   const json = (data: unknown, status = 200) =>
@@ -301,7 +360,7 @@ export function createApp(opts: { root?: string; log?: (line: string) => void } 
     const { pathname } = new URL(req.url);
     try {
       if (req.method === "GET" && pathname === "/") {
-        return new Response(launcherHtml(await listReels(root), inbox()), {
+        return new Response(launcherHtml(await listReels(root), inbox(), assistantView()), {
           headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" },
         });
       }
@@ -328,7 +387,24 @@ export function createApp(opts: { root?: string; log?: (line: string) => void } 
 
       // Only this app's own page sends this header; another website cannot.
       if (req.headers.get("X-Reel-Editor") !== "1") return fail("Not allowed", 403);
-      const body = (await req.json().catch(() => ({}))) as { slug?: unknown; file?: unknown };
+      const body = (await req.json().catch(() => ({}))) as { slug?: unknown; file?: unknown; choice?: unknown };
+
+      // Editing by chat: remember the answer and start the chosen assistant in the reel folder.
+      if (pathname === "/api/assistant") {
+        if (body.choice === "reset") {
+          writeSettings(root, {});
+          return json({ ok: true });
+        }
+        if (body.choice === "none") {
+          writeSettings(root, { asked: true, assistant: "none" });
+          return json({ ok: true });
+        }
+        if (!isAssistant(body.choice)) return fail("Choose Claude, ChatGPT or not now");
+        const assistant = ASSISTANTS[body.choice];
+        writeSettings(root, { asked: true, assistant: body.choice });
+        launch(prepareLauncher(root, body.choice));
+        return json({ ok: true, name: assistant.name, installed: Boolean(tool(assistant.command)), install: assistant.install });
+      }
 
       if (pathname === "/api/inbox") {
         mkdirSync(join(root, "inbox"), { recursive: true });
@@ -395,7 +471,7 @@ export function createApp(opts: { root?: string; log?: (line: string) => void } 
   return { handle, close };
 }
 
-export async function startServer(opts: { port?: number; root?: string; log?: (line: string) => void } = {}) {
+export async function startServer(opts: AppOptions & { port?: number } = {}) {
   const app = createApp(opts);
   const server = Bun.serve({
     hostname: "127.0.0.1",

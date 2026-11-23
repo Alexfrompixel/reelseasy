@@ -69,7 +69,9 @@ The app remembers where this folder is, so run `bash app/build.sh` again if you 
 
 ## Use it with a coding agent
 
-Open Claude Code, or another agent that reads `CLAUDE.md`, in this folder:
+The first time you open the app it asks whether you edit with Claude Code or with Codex, the coding agent from the makers of ChatGPT. Pick one and it opens in Terminal, in this folder, ready to take instructions. Later, the "Ask Claude" or "Ask Codex" button in the app does the same. You can also open the agent in this folder yourself: Claude Code reads `CLAUDE.md`, Codex reads `AGENTS.md`. So far only Claude Code has been tried.
+
+Then say what you want:
 
 > Edit inbox/IMG_1234.MOV into a reel.
 
@@ -108,6 +110,7 @@ bun scripts/reel.ts render img-1234
 - `app/` the Mac app's source
 - `scripts/` the pipeline and its tests (`bun test`)
 - `brand/` logo and icons
+- `site/` the website at reelseasy.com, an Astro project (`cd site && bun install && bun run dev`)
 - `docs/` the plan
 
 ## Sounds
