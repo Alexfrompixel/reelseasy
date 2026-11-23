@@ -1,0 +1,90 @@
+# dependencies (bun install)
+node_modules
+
+# output
+out
+dist
+*.tgz
+
+# code coverage
+coverage
+*.lcov
+
+# logs
+logs
+_.log
+report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# caches
+.eslintcache
+.cache
+*.tsbuildinfo
+
+# IntelliJ based IDEs
+.idea
+
+# Finder (MacOS) folder config
+.DS_Store
+
+# video working files
+.hyperframes
+reels/*/work
+reels/*/footage.mp4
+reels/*/renders
+
+# your clips and finished reels stay on this Mac, never in git
+inbox/*
+!inbox/.gitkeep
+exports/*
+!exports/.gitkeep
+
+# rebuilt by: bun scripts/reel.ts ingest / build
+reels/*/index.html
+reels/*/compositions/captions.html
+reels/*/transcript.json
+reels/*/assets/sfx
+reels/*/.thumbnails
+reels/*/.waveform-cache
+
+# the built Mac app and its build folder
+ReelsEasy.app
+Reel Editor.app
+app/.build
+
+# working copies of clips and copied sounds
+reels/*/assets
+
+# logo drafts and renders: the files built from them are kept
+brand/logo-ideas
+
+# made on your Mac from HyperFrames' own sounds (bun scripts/reel.ts sounds): their licence
+# does not allow handing the files out on their own
+sfx/whoosh-fast.mp3
+sfx/whoosh-long.mp3
+sfx/typing.mp3
+sfx/key-press.mp3
+sfx/pop.mp3
+sfx/click.mp3
+sfx/ping.mp3
+sfx/chime.mp3
+sfx/notification.mp3
+sfx/sparkle.mp3
+sfx/impact.mp3
+sfx/riser.mp3
+sfx/error.mp3
+sfx/glitch.mp3
+
+# your reels stay on this Mac too
+reels/*
+!reels/.gitkeep
+
+# agent skills from HyperFrames: install them with node_modules/.bin/hyperframes skills
+.claude/skills
+skills-lock.json

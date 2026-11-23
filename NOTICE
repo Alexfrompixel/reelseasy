@@ -1,0 +1,24 @@
+ReelsEasy
+Copyright 2026 the ReelsEasy authors
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+The name "ReelsEasy" and the ReelsEasy logo and icons (the files in brand/)
+are not licensed under the Apache License. You may build and run the app with
+them unchanged. If you distribute a changed version, give it another name and
+another logo.
+
+This product uses HyperFrames (https://github.com/heygen-com/hyperframes),
+Copyright HeyGen, licensed under the Apache License, Version 2.0. It is
+installed from npm and is not part of this repository. Inside the app its
+editor is shown with different colours, and controls for HeyGen's own
+services are hidden. "HeyGen" and "HyperFrames" are names of their owner.
+
+Five sounds in sfx/ are public domain (CC0 1.0); their sources are listed in
+sfx/CREDITS.md. Fourteen further sounds are not part of this repository: they
+are made on the user's computer from files that HyperFrames distributes under
+the Pixabay Content License.
+
+docs/reelseasy-list.png and docs/reelseasy-editor.png show a frame from
+"Daniel speaking English" by Wikitongues (Wikimedia Commons), licensed
+CC BY-SA 4.0. Those two files are licensed CC BY-SA 4.0.

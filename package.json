@@ -1,0 +1,24 @@
+{
+  "name": "reelseasy",
+  "description": "A free, local Mac app that turns a vertical phone clip into a finished reel",
+  "license": "Apache-2.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "ingest": "bun scripts/reel.ts ingest",
+    "build": "bun scripts/reel.ts build",
+    "render": "bun scripts/reel.ts render",
+    "test": "bun test",
+    "sounds": "bun scripts/reel.ts sounds",
+    "postinstall": "bun scripts/reel.ts sounds"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "hyperframes": "0.9.38"
+  }
+}

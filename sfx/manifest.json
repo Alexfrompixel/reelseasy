@@ -1,0 +1,192 @@
+{
+  "whoosh-in": {
+    "file": "whoosh-in.mp3",
+    "duration": 0.62,
+    "sync": 0.48,
+    "volume": 0.4,
+    "use": "Fly in: builds and lands on the moment. For something arriving: a zoom in, a caption or emoji entering.",
+    "licence": "CC0 1.0",
+    "source": "https://freesound.org/people/SlavicMagic/sounds/446010",
+    "credit": "\"Backwards Whoosh\" by SlavicMagic (Freesound), trimmed and levelled"
+  },
+  "whoosh-out": {
+    "file": "whoosh-out.mp3",
+    "duration": 0.53,
+    "sync": 0,
+    "volume": 0.35,
+    "use": "Fly out: starts on the moment and trails away. For something leaving: a zoom back out, a cut away.",
+    "licence": "CC0 1.0",
+    "source": "https://freesound.org/people/Sadiquecat/sounds/706677",
+    "credit": "\"Whoosh Bamboo 2\" by Sadiquecat (Freesound), trimmed and levelled"
+  },
+  "whoosh": {
+    "file": "whoosh.mp3",
+    "duration": 0.85,
+    "sync": 0.3,
+    "volume": 0.35,
+    "use": "Pass-by whoosh, even on both sides. For a cut between two thoughts or a quick move across the frame.",
+    "licence": "CC0 1.0",
+    "source": "https://freesound.org/people/GameAudio/sounds/220191",
+    "credit": "\"Space Swoosh - brighter\" by GameAudio (Freesound), trimmed and levelled"
+  },
+  "whoosh-fast": {
+    "file": "whoosh-fast.mp3",
+    "duration": 0.32,
+    "sync": 0,
+    "volume": 0.35,
+    "use": "Short sharp swipe. For a hard punch-in or a fast caption change.",
+    "licence": "Pixabay Content License",
+    "source": "https://pixabay.com/sound-effects/",
+    "credit": "Pixabay, bundled with HyperFrames as whoosh.mp3, trimmed and levelled"
+  },
+  "whoosh-long": {
+    "file": "whoosh-long.mp3",
+    "duration": 3.67,
+    "sync": 1.93,
+    "volume": 0.3,
+    "use": "Slow cinematic sweep, about 2 s in and 2 s out, peaking on the moment. For one big reveal per reel at most.",
+    "licence": "Pixabay Content License",
+    "source": "https://pixabay.com/sound-effects/",
+    "credit": "Pixabay, bundled with HyperFrames as whoosh-cinematic.mp3, trimmed and levelled"
+  },
+  "typing": {
+    "file": "typing.mp3",
+    "duration": 1.07,
+    "sync": 0,
+    "volume": 0.5,
+    "use": "Short burst of keys, 1.5 s. For a line of text typing itself on.",
+    "licence": "Pixabay Content License",
+    "source": "https://pixabay.com/sound-effects/",
+    "credit": "Pixabay, bundled with HyperFrames as typing.mp3, trimmed and levelled"
+  },
+  "typing-long": {
+    "file": "typing-long.mp3",
+    "duration": 3.84,
+    "sync": 0,
+    "volume": 0.5,
+    "use": "About 4 s of laptop typing. For longer typed text; trim it with \"until\".",
+    "licence": "CC0 1.0",
+    "source": "https://freesound.org/people/Psykophobia/sounds/250390",
+    "credit": "\"Keyboard Typing Tapping.wav\" by Psykophobia (Freesound), trimmed and levelled"
+  },
+  "typing-mechanical": {
+    "file": "typing-mechanical.mp3",
+    "duration": 6.84,
+    "sync": 0,
+    "volume": 0.5,
+    "use": "About 7 s of clicky mechanical keyboard. For a coding or terminal moment; trim it with \"until\".",
+    "licence": "CC0 1.0",
+    "source": "https://freesound.org/people/el_boss/sounds/643557",
+    "credit": "\"Kailh Box Pale Blue Mechanical Key\" by el_boss (Freesound), trimmed and levelled"
+  },
+  "key-press": {
+    "file": "key-press.mp3",
+    "duration": 0.1,
+    "sync": 0,
+    "volume": 0.4,
+    "use": "One keystroke. For a single word or character landing.",
+    "licence": "Pixabay Content License",
+    "source": "https://pixabay.com/sound-effects/",
+    "credit": "Pixabay, bundled with HyperFrames as key-press.mp3, trimmed and levelled"
+  },
+  "pop": {
+    "file": "pop.mp3",
+    "duration": 0.27,
+    "sync": 0,
+    "volume": 0.4,
+    "use": "Quick pop. The default for an emoji or sticker appearing.",
+    "licence": "Pixabay Content License",
+    "source": "https://pixabay.com/sound-effects/",
+    "credit": "Pixabay, bundled with HyperFrames as pop.mp3, trimmed and levelled"
+  },
+  "click": {
+    "file": "click.mp3",
+    "duration": 0.16,
+    "sync": 0,
+    "volume": 0.4,
+    "use": "Crisp click. For a button, a tick, a list item appearing.",
+    "licence": "Pixabay Content License",
+    "source": "https://pixabay.com/sound-effects/",
+    "credit": "Pixabay, bundled with HyperFrames as click.mp3, trimmed and levelled"
+  },
+  "ping": {
+    "file": "ping.mp3",
+    "duration": 0.68,
+    "sync": 0,
+    "volume": 0.3,
+    "use": "Sharp electronic ping. For a number or key fact.",
+    "licence": "Pixabay Content License",
+    "source": "https://pixabay.com/sound-effects/",
+    "credit": "Pixabay, bundled with HyperFrames as ping.mp3, trimmed and levelled"
+  },
+  "chime": {
+    "file": "chime.mp3",
+    "duration": 2.11,
+    "sync": 0,
+    "volume": 0.3,
+    "use": "Soft melodic chime. For a win, a result, a good ending.",
+    "licence": "Pixabay Content License",
+    "source": "https://pixabay.com/sound-effects/",
+    "credit": "Pixabay, bundled with HyperFrames as chime.mp3, trimmed and levelled"
+  },
+  "notification": {
+    "file": "notification.mp3",
+    "duration": 1.44,
+    "sync": 0,
+    "volume": 0.3,
+    "use": "Message-in tone. For a chat bubble or an alert on screen.",
+    "licence": "Pixabay Content License",
+    "source": "https://pixabay.com/sound-effects/",
+    "credit": "Pixabay, bundled with HyperFrames as notification.mp3, trimmed and levelled"
+  },
+  "sparkle": {
+    "file": "sparkle.mp3",
+    "duration": 1.78,
+    "sync": 0,
+    "volume": 0.3,
+    "use": "Bright shimmer. For a before-and-after or a highlight.",
+    "licence": "Pixabay Content License",
+    "source": "https://pixabay.com/sound-effects/",
+    "credit": "Pixabay, bundled with HyperFrames as sparkle.mp3, trimmed and levelled"
+  },
+  "impact": {
+    "file": "impact.mp3",
+    "duration": 2.05,
+    "sync": 0,
+    "volume": 0.35,
+    "use": "Deep bass hit. For the one line that must land hard.",
+    "licence": "Pixabay Content License",
+    "source": "https://pixabay.com/sound-effects/",
+    "credit": "Pixabay, bundled with HyperFrames as impact-bass-1.mp3, trimmed and levelled"
+  },
+  "riser": {
+    "file": "riser.mp3",
+    "duration": 3.54,
+    "sync": 1.94,
+    "volume": 0.25,
+    "use": "Rising build of about 2 s that crests on the moment, then rings out. For the run-up to a reveal.",
+    "licence": "Pixabay Content License",
+    "source": "https://pixabay.com/sound-effects/",
+    "credit": "Pixabay, bundled with HyperFrames as riser.mp3, trimmed and levelled"
+  },
+  "error": {
+    "file": "error.mp3",
+    "duration": 0.33,
+    "sync": 0,
+    "volume": 0.3,
+    "use": "Wrong-answer tone. For a mistake or a myth being called out.",
+    "licence": "Pixabay Content License",
+    "source": "https://pixabay.com/sound-effects/",
+    "credit": "Pixabay, bundled with HyperFrames as error.mp3, trimmed and levelled"
+  },
+  "glitch": {
+    "file": "glitch.mp3",
+    "duration": 2.5,
+    "sync": 0,
+    "volume": 0.3,
+    "use": "Digital glitch. For a jarring cut or a tech moment.",
+    "licence": "Pixabay Content License",
+    "source": "https://pixabay.com/sound-effects/",
+    "credit": "Pixabay, bundled with HyperFrames as glitch-1.mp3, trimmed and levelled"
+  }
+}
